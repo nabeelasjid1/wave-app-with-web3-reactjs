@@ -7,7 +7,7 @@ export default function App() {
   const [allWaves, setAllWaves] = useState([]);
   const [currentAccount, setCurrentAccount] = useState("");
   const [userMessage, setUserMessage] = useState("");
-  const contractAddress = "0xe84a9e38d8f29F45C032236784ccCd9F3294555f";
+  const contractAddress = "0xae8a0D143D3236A205a7Ceffbce55840E212A7e0";
   const contractABI = abi.abi;
 
   const checkIfWalletIsConnected = async () => {
@@ -73,12 +73,15 @@ export default function App() {
 
         let count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber());
-
-        const waveTxn = await wavePortalContract.wave(userMessage);
-        console.log("Mining...", waveTxn.hash);
-
-        await waveTxn.wait();
-        console.log("Mined -- ", waveTxn.hash);
+        try {
+          const waveTxn = await wavePortalContract.wave(userMessage);
+          console.log("Mining...", waveTxn.hash);
+          await waveTxn.wait();
+          console.log("Mined -- ", waveTxn.hash);
+        } catch (error) {
+          alert("no spams 🤣 wait 15 minutes to send message again")
+          return;
+        }
 
         count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber());
@@ -87,7 +90,7 @@ export default function App() {
         console.log("Ethereum object doesn't exist!");
       }
     } catch (error) {
-      console.log(error);
+      console.log("error issss", error);
     }
   };
 
